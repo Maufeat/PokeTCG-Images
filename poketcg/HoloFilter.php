@@ -30,9 +30,6 @@ class HoloFilter implements \Imagine\Filter\FilterInterface {
         $holo = new Imagine();
         $holoInterface = $holo->open($this->holoPath);
         $holoInterface->layers()->coalesce();
-        $holoDiff = new Imagine();
-        $holoDiffMask = $holoDiff->open("F:\\xampp\\htdocs\\sparkles_diff.gif");
-        $holoDiffMask->layers()->coalesce();
 
         $i = 0;
         foreach ($holoInterface->layers() as $frame) {
@@ -42,7 +39,7 @@ class HoloFilter implements \Imagine\Filter\FilterInterface {
             $offset = $i / count($holoInterface->layers());
             if($offset == 0)
                 $offset = 0.01; 
-                
+
             $frame->resize($canvas);
             
             //Sparkle
