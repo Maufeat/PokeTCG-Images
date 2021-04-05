@@ -18,6 +18,8 @@ class CardFactory {
     public $height;
     public $format;
 
+    public $damage = 0;
+
     public $holoType = "none";
 
     private $borderX = 14;
@@ -48,6 +50,12 @@ class CardFactory {
         $this->holoType = $holo;
     }
 
+    function setDamage(float $damage){
+        if($damage > 1)
+            $damage = 1;
+        $this->damage = $damage * 50;
+    }
+
     function create() {
         $imagine = new Imagine();
         $ocInterface = $imagine->open($this->image);
@@ -76,6 +84,9 @@ class CardFactory {
 
     function show() {
         if($this->holoType == "none") {
+            $imagine = new Imagine();
+            $imagineInterface = $imagine->open("F:\\xampp\\htdocs\\damage.png");
+            $this->interface->paste($imagineInterface, new Point(0,0), $this->damage);
             $this->interface->show($this->format);
         } else {
             $holo = new HoloFilter($this, "F:\\xampp\\htdocs\\sparkles.gif");

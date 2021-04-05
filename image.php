@@ -13,7 +13,10 @@ if (!function_exists('str_starts_with')) {
 }
 
 if(isset($_GET["data"])){
+
     $imagine = new Imagine\Gd\Imagine();
+
+    $card = new CardFactory();
 
     if (str_starts_with($_GET["data"], '{')) {
         $data = json_decode($_GET["data"]);
@@ -21,10 +24,15 @@ if(isset($_GET["data"])){
         $data = json_decode(base64_decode($_GET["data"]));
     }
 
-    $card = new CardFactory();
-    $card->setImage($data->image);
-    $card->setOffset($data->offsetX - 0.5, $data->offsetY);
-    $card->setHolo("sparkle");
+    if(isset($data->image))
+        $card->setImage($data->image);
+    if(isset($data->offsetX) && isset($data->offsetY))
+        $card->setOffset($data->offsetX, $data->offsetY);
+    if(isset($data->holoEffect))
+        $card->setHolo("none");
+    if(isset($data->damage))
+        $card->setDamage($data->damage);
+
     $card->create();
     $card->show();
 

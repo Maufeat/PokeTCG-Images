@@ -27,21 +27,27 @@ class HoloFilter implements \Imagine\Filter\FilterInterface {
 
         $holoGlow = $this->getHoloEffect($size);
 
-        $holo = new Imagine();
-        $holoInterface = $holo->open($this->holoPath);
+        $tempImagine = new Imagine();
+        $holoInterface = $tempImagine->open($this->holoPath);
         $holoInterface->layers()->coalesce();
+
+        $negateCard = $tempImagine->create($size);
+        $negateCard->paste($card, new Point(0,0));
+        $negateCard->effects()->negative();
+        
+        $damageInterface = $tempImagine->open("F:\\xampp\\htdocs\\damage.png");
 
         $i = 0;
         foreach ($holoInterface->layers() as $frame) {
 
-            $tempImagine = new Imagine();
-
             $offset = $i / count($holoInterface->layers());
             if($offset == 0)
-                $offset = 0.01; 
+                $offset += 0.01;
+            if($i+1 == count($holoInterface->layers()))
+                $offset = 0.95;
 
             $frame->resize($canvas);
-            
+
             //Sparkle
             $glitterInterface = $tempImagine->create($size);
             $glitterInterface->paste($frame, new Point(0,0));
@@ -55,10 +61,13 @@ class HoloFilter implements \Imagine\Filter\FilterInterface {
             $width = $tempInterface->getSize()->getWidth();
             $height = $tempInterface->getSize()->getHeight();
             $tempInterface->crop(new Point($width - ($width * $offset), $height - ($height * $offset)), new Box($width, $height));
-
             $frame->paste($card, new Point($this->cardFactory->offsetX, $this->cardFactory->offsetY));
             $frame->paste($glitterInterface, new Point($this->cardFactory->offsetX, $this->cardFactory->offsetY));
             $frame->paste($tempInterface, new Point(0,0));
+            
+            //Damage
+            $frame->paste($damageInterface, new Point(0,0), $this->cardFactory->damage);
+
             $i++;
         }
         
