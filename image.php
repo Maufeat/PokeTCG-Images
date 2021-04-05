@@ -28,8 +28,8 @@ if(isset($_GET["data"])){
         $card->setImage($data->image);
     if(isset($data->offsetX) && isset($data->offsetY))
         $card->setOffset($data->offsetX, $data->offsetY);
-    if(isset($data->holoEffect))
-        $card->setHolo("none");
+    if(isset($data->holo))
+        $card->setHolo($data->holo);
     if(isset($data->damage))
         $card->setDamage($data->damage);
 

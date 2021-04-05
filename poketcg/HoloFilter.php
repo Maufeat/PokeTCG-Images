@@ -61,7 +61,7 @@ class HoloFilter implements \Imagine\Filter\FilterInterface {
             $width = $tempInterface->getSize()->getWidth();
             $height = $tempInterface->getSize()->getHeight();
             $tempInterface->crop(new Point($width - ($width * $offset), $height - ($height * $offset)), new Box($width, $height));
-            $frame->paste($card, new Point($this->cardFactory->offsetX, $this->cardFactory->offsetY));
+            $frame->paste($card, new Point(0,0));
             $frame->paste($glitterInterface, new Point($this->cardFactory->offsetX, $this->cardFactory->offsetY));
             $frame->paste($tempInterface, new Point(0,0));
             
